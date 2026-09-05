@@ -6,7 +6,8 @@ Seven repositories. Which one to open depends on what you want to see.
 |---|---|
 | What the project is | this repository (you are here) |
 | Numerical method quality, tests, a small readable codebase | [`hpa-core`](https://github.com/Prosper1030/hpa-core) |
-| CFD / meshing research, including what failed | [`hpa-meshing`](https://github.com/Prosper1030/hpa-meshing) |
+| Meshing/CFD infrastructure research, including what failed and why it paused | [`hpa-meshing`](https://github.com/Prosper1030/hpa-meshing) |
+| The RANS grid-convergence study and the rejected transition campaign | [`verification.md`](verification.md) §4–6 *(code is in the private `hpa-next`)* |
 | Undergraduate research: shape optimization end to end | [`HPA-Fairing-Optimization-Project`](https://github.com/Prosper1030/HPA-Fairing-Optimization-Project) |
 | Where the project started: systems decomposition | [`birdman_project`](https://github.com/Prosper1030/birdman_project) |
 | The full development record | [`hpa-mdo`](https://github.com/Prosper1030/hpa-mdo) |
@@ -15,8 +16,8 @@ Seven repositories. Which one to open depends on what you want to see.
 
 ## `hpa-core` — trusted structural kernel
 
-**Maturity: stable / frozen.** 22 files, 4,610 lines, 27 passing tests, dependencies `numpy` and
-`scipy` only.
+**Maturity: stable / frozen.** **One kernel, not a collection.** 22 files, 4,610 lines, 27
+passing tests, dependencies `numpy` and `scipy` only.
 
 Solves the dual-beam (two-spar) wing structure: stiffness and constraint assembly (root
 fixity, lift-wire supports, rib links between spars), load split between spars, the linear solve,
@@ -30,9 +31,16 @@ export, everything CFD.
 Small and authoritative rather than large and ambiguous. Its narrow dependency surface is the
 property that makes it worth trusting; expanding it would cost exactly that.
 
-## `hpa-meshing` — meshing and CFD research
+## `hpa-meshing` — meshing/CFD productization line (paused)
 
-**Maturity: active experimental.** Produces evidence, not authority.
+**Maturity: paused experimental.** Produces evidence, not authority.
+
+**This is not where the WO-006 OpenFOAM verification campaign lives.** That work — the
+Coarse/Medium/Fine grid-convergence ladder and the rejected transition study in
+[`verification.md`](verification.md) §4–6 — is in `hpa-next`. `hpa-meshing` is the attempt to
+build a *reusable* geometry → mesh → CFD pipeline, and it stalled on geometry export before
+producing an accepted aerodynamic coefficient. The two are separate efforts with separate
+status.
 
 Provider-aware geometry normalization, geometry-family dispatch, a gmsh backend that produces
 real external-flow volume meshes, package-native SU2 case materialization, and versioned artifact

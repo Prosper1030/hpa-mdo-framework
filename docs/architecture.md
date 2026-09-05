@@ -14,7 +14,7 @@ way to tell them apart.
 |---|---|---|
 | **Trusted kernel** | `hpa-core` | Stable. Should not be modified during ordinary development. Changing it requires deliberate justification and re-running its own suite. |
 | **Current mainline** | `hpa-next` | Where development happens. Correct but moving. |
-| **Active experimental** | `hpa-meshing` | A research line. Produces evidence, not authority. |
+| **Paused experimental** | `hpa-meshing` | The meshing/CFD *productization* line. Produces evidence, not authority, and is not the source of the WO-006 verification results — those live in `hpa-next`. |
 | **Legacy** | `hpa-mdo` | Historical record. No new development. |
 
 ## The core seam
@@ -32,7 +32,10 @@ wire pre-tension into unstretched length is pure numpy and would be easy to test
 kernel; it stays in the application layer because it is model *construction*. Letting
 convenience decide the boundary is how the boundary stops meaning anything.
 
-## What `hpa-core` contains, and why nothing else
+## What the one kernel contains, and why nothing else
+
+`hpa-core` holds **a single kernel** — the dual-beam structural solve. It is not a library of
+numerical kernels and was not grown into one.
 
 Admission requires four conditions simultaneously:
 

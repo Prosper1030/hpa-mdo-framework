@@ -17,13 +17,24 @@ its repository, that is said explicitly rather than smoothed over.
 
 ---
 
-## Stage 0 — Prototypes (2025-07)
+## Stage 0 — Two prototypes before the tool that stuck (2025-07)
 
-Two short-lived attempts at a WBS/DSM planning tool, five days apart:
-`wbs_dsm_gui_v2` (2025-07-26, public) and `birdaman` (2025-07-30, private, PyQt6).
+The DSM/WBS line has **three generations**, all within six days:
 
-Both were rebuilt rather than extended. They are kept because the rebuild decision is part of
-the record.
+```text
+wbs_dsm_gui_v2      2025-07-26   public    ~8 KB    WBS table editor, Markdown I/O
+      ↓  rebuilt
+birdaman            2025-07-30   private   ~43 KB   PyQt6 "WBS/DSM Planner": DSM, SCC, Layer
+      ↓  rebuilt
+birdman_project     2025-07-31   public    345 commits, through 2026-04
+```
+
+Neither prototype was extended; both were rebuilt from scratch. That is the useful detail — the
+second attempt already had SCC and layer analysis, and was still discarded, because the thing
+that needed fixing was the structure rather than the features.
+
+They are kept, not deleted. A reader who follows the lineage sees a real
+prototype → prototype → rebuild sequence rather than a tool that arrived fully formed.
 
 ## Stage 1 — Represent the dependency structure before writing physics
 

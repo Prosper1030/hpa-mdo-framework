@@ -46,6 +46,10 @@ verification silently, which is the worst failure mode available.
 
 ## 4. Grid convergence — RANS, full wing
 
+> Sections 4–6 report the **WO-006 OpenFOAM campaign**. Its scripts and artifacts live in
+> `hpa-next` (`scripts/cfd_rescue/`, `output/baseline_A_team_release/`), **not** in
+> `hpa-meshing`. The `hpa-meshing` SU2 line is a separate, paused effort — see §7.
+
 A three-level Coarse / Medium / Fine OpenFOAM ladder on a fixed full-wing geometry, with
 geometry, angle of attack, density, velocity, turbulence model (Spalart–Allmaras), boundary
 conditions, force definitions, `fvSchemes` / `fvSolution` and the `potentialFoam` startup
@@ -115,7 +119,12 @@ What is required before a credible number exists: bound the real free-flight tur
 surface-roughness environment; independently validate a low-Reynolds transition model; and check
 tip and outer-wing behavior separately.
 
-## 7. Meshing route status
+## 7. Meshing route status — the *other* CFD line
+
+Sections 4–6 above describe the **WO-006 OpenFOAM campaign**, whose code lives in `hpa-next`.
+This section describes a **different and separate effort**: the packaged geometry → mesh → SU2
+productization line in `hpa-meshing`. It is **paused**, and it produced no accepted aerodynamic
+coefficient. Do not read the numbers above as coming from it.
 
 The packaged `hpa-meshing` route (`.vsp3` → OpenVSP surface intersection → normalized trimmed
 STEP → gmsh thin-sheet assembly → `mesh_handoff.v1` → SU2 → `su2_handoff.v1` →

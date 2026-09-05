@@ -22,8 +22,9 @@ which those can be decided independently.
 
 The work in this project is the tooling built to reason about that coupling numerically:
 
-- a **structural kernel** that solves a two-spar (dual-beam) wing with lift-wire bracing under a
-  mapped aerodynamic load, and reports stress, deflection, twist, wire tension and mass;
+- **one** trusted structural kernel (`hpa-core` — a single kernel, not a library of them) that
+  solves a two-spar (dual-beam) wing with lift-wire bracing under a mapped aerodynamic load, and
+  reports stress, deflection, twist, wire tension and mass;
 - an **application layer** that builds those models from declared configuration, maps
   aerodynamic loads onto the structural mesh, and drives optimization;
 - **aerodynamic analysis at two fidelities** — panel/vortex-lattice methods for the design loop,
@@ -58,17 +59,27 @@ Three couplings drive the whole framework:
 
 ## 3. Development history
 
-Four stages, each of which happened because the previous one ran into a specific limit. Stages 1
-and 2 overlap in git time with what follows; the ordering below is the conceptual dependency,
-and [`docs/development_history.md`](docs/development_history.md) gives the actual dates and says
-where they differ.
+Four stages, each of which happened because the previous one ran into a specific limit.
 
-**1 — Dependency structure before physics** (`birdman_project`, 2025–2026)
+**The ordering below is the conceptual dependency, not the repository creation order.** The two
+differ, and the difference is stated rather than smoothed over: `hpa-mdo` was created on
+2026-04-06, five days *before* the fairing repository, and `birdman_project` continued to be
+developed until 2026-04-17 — well after the physics work began. Version control was adopted at
+different points for different pieces of work, and two lines ran in parallel.
+[`docs/development_history.md`](docs/development_history.md) gives the actual dates, a timeline,
+and says exactly where the two orderings diverge.
+
+**1 — Dependency structure before physics** (2025–2026)
 Before writing any solver, the problem was represented as a graph: a Design Structure Matrix
 over the work-breakdown structure, with topological sorting, strongly-connected-component
 detection to find the genuinely coupled subsystems, and task merging. This produced an
 interactive DSM editor with an orthogonal edge-routing engine. *Result: the coupled clusters that
 cannot be decomposed were identified explicitly, before committing to a solver architecture.*
+
+This stage took three attempts, five days apart:
+`wbs_dsm_gui_v2` (2025-07-26) → `birdaman` (2025-07-30, private) → **`birdman_project`**
+(2025-07-31, 345 commits). The first two were rebuilt rather than extended; only the third is
+worth reading.
 
 **2 — Physical modeling and optimization on one discipline** (`HPA-Fairing-Optimization-Project`,
 2026)
@@ -128,10 +139,27 @@ future contributor should rely on a given piece of code.* That is the current ar
 `hpa-meshing>=0.1.0`). Historical import paths still resolve through thin re-export shims, so the
 split did not break existing code.
 
-**One thing this diagram does not show, and should:** the RANS work is split across two
-repositories. The *packaged* geometry→mesh→SU2 route lives in `hpa-meshing`. The *active*
-full-wing OpenFOAM verification campaign (WO-006) lives in `hpa-next`, because it grew out of the
-application-level scripts. They are separate efforts with separate status — see section 6.
+### The two CFD lines are different efforts — do not conflate them
+
+The diagram above shows `hpa-meshing` under aerodynamics, which is where it sits
+architecturally, but that placement hides something a reader needs:
+
+| | `hpa-meshing` | WO-006 campaign |
+|---|---|---|
+| **What it is** | Attempt to *productize* a repeatable geometry → mesh → CFD pipeline: provider-aware normalization, family dispatch, versioned artifact contracts, convergence gates | A *specific verification study* on one fixed full-wing geometry |
+| **Stack** | OpenVSP / ESP → trimmed STEP → gmsh → SU2 | OpenFOAM `simpleFoam` (SA, kOmegaSST, kOmegaSSTLM) |
+| **Where the code lives** | `hpa-meshing` | **`hpa-next`** (`scripts/`, `scripts/cfd_rescue/`, `output/baseline_A_team_release/`) |
+| **Status** | **Paused.** Formal v1 route runs; main-wing route blocked at STEP/PCurve metadata; mesh-native branch frozen 2026-05-01 | **Ran to a result** through 2026-08-02: grid-stable SA solution accepted, transition route explicitly not established |
+| **What it produced** | Infrastructure and negative results, no accepted aerodynamic coefficient | The Coarse/Medium/Fine ladder and the rejected transition campaign in section 6 |
+
+**`hpa-meshing` is the paused productization line. It is not the source of the numbers in
+section 6.** Those come from the WO-006 OpenFOAM campaign, which lives in `hpa-next`.
+
+The split is historical rather than designed: the packaged line was built as a general
+capability, and when it stalled on geometry export, the verification work that actually had to
+happen was done directly against a fixed mesh in the application repository. Both are kept —
+the packaged line's contracts and gates are reusable, and its blockers are documented rather
+than abandoned.
 
 ## 5. Modeling philosophy
 
@@ -139,10 +167,12 @@ application-level scripts. They are separate efforts with separate status — se
 trusted", not "what discipline is this". A pure-numpy helper that belongs to model construction
 stays in the application layer, even though it would be convenient to test inside the kernel.
 
-**Keep the trusted kernel small and hard to change.** `hpa-core` has two dependencies (numpy,
-scipy), reads no configuration and no files, and does not know what an aircraft is — the caller
-hands it a fully-built model object. This is deliberately inconvenient. It is what makes the
-kernel's numerical behavior stable enough to rely on.
+**Keep the trusted kernel small and hard to change.** `hpa-core` is **a single kernel**, not a
+collection of them: it solves exactly one problem, the dual-beam structural response. It has two
+dependencies (numpy, scipy), reads no configuration and no files, and does not know what an
+aircraft is — the caller hands it a fully-built model object. This is deliberately inconvenient.
+It is what makes the kernel's numerical behavior stable enough to rely on. Nothing has been
+added to it to make it look larger.
 
 **Fidelity is a decision, not a default.** Cheap models run inside optimization loops; expensive
 models verify a small number of survivors. Mixing them produces slow loops and unverified
@@ -223,7 +253,7 @@ Establishing a credible low-Reynolds transition prediction is the open verificat
 | Repository | Role | Maturity | Status |
 |---|---|---|---|
 | **hpa-mdo-framework** | This page — project overview and navigation | — | Public |
-| **[hpa-core](https://github.com/Prosper1030/hpa-core)** | Dual-beam structural FE kernel. numpy + scipy only. No config, no file I/O, no aircraft knowledge. | **Trusted / frozen** | See note below |
+| **[hpa-core](https://github.com/Prosper1030/hpa-core)** | **One** kernel — the dual-beam structural FE solve. numpy + scipy only. No config, no file I/O, no aircraft knowledge. 22 files, 4,610 lines. | **Trusted / frozen** | See note below |
 | **[hpa-meshing](https://github.com/Prosper1030/hpa-meshing)** | Geometry normalization → gmsh → SU2, with artifact contracts and convergence gates. | **Experimental research line** | See note below |
 | **hpa-next** | Application and orchestration: config, aircraft model, material DB, load mapping, OpenMDAO stack, mission analysis, and the WO-006 OpenFOAM campaign. | **Active development** | **Private** while the post-split development line stabilizes. Its architectural role is described here rather than omitted. |
 | **[hpa-mdo](https://github.com/Prosper1030/hpa-mdo)** | The original monolith. 1,318 commits. Preserved as development history; also still the shared git object store. | **Legacy** | Public — history, not a starting point |
