@@ -112,7 +112,7 @@ modestly, and it should not be read as one.
 ### Primary evidence
 
 The full campaign is published as a branch of the legacy repository —
-[`research/wo006-openfoam-campaign`](https://github.com/Prosper1030/hpa-mdo/blob/research/wo006-openfoam-campaign) — so these claims can be checked rather than taken on
+[`research/wo006-openfoam-campaign`](https://github.com/Prosper1030/hpa-mdo/tree/research/wo006-openfoam-campaign) — so these claims can be checked rather than taken on
 trust. It is 88 research commits plus one commit removing third-party documents from the branch
 tip. Start with these five rather than browsing 988 files:
 
