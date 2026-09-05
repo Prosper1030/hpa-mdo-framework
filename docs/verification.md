@@ -105,6 +105,42 @@ only total `CD` been examined, the conclusion would have been wrong in the favor
 
 Recorded status: **`transition_route_not_established`**.
 
+**The transition campaign was not promoted to a design-authoritative result, because the force
+credibility gate was not satisfied.** That is the outcome. It is not a CFD success reported
+modestly, and it should not be read as one.
+
+### Primary evidence
+
+The full campaign is published as a branch of the legacy repository —
+[`research/wo006-openfoam-campaign`](https://github.com/Prosper1030/hpa-mdo/blob/research/wo006-openfoam-campaign) — so these claims can be checked rather than taken on
+trust. It is 88 research commits plus one commit removing third-party documents from the branch
+tip. Start with these five rather than browsing 988 files:
+
+| | What it shows |
+|---|---|
+| [`final_hpa_grid_independence_verdict.md`](https://github.com/Prosper1030/hpa-mdo/blob/research/wo006-openfoam-campaign/output/baseline_A_team_release/wo006_su2_baseline_validation/cfd_release_v0_hpa_solver_campaign_repair/final_hpa_grid_independence_verdict.md) | **Read this first.** Six numbered questions, answered directly: the operating-condition lock, the Coarse/Medium/Fine table, why Coarse is excluded rather than averaged in, why `CD ≈ 0.0315` cannot be trusted, and — question 6 — that no design-power update is authorized by the verdict. |
+| [`recovery_report.md`](https://github.com/Prosper1030/hpa-mdo/blob/research/wo006-openfoam-campaign/output/baseline_A_team_release/wo006_su2_baseline_validation/cfd_release_v0_hpa_openfoam_transition_baseline_recovery/recovery_report.md) | The rejected transition campaign. Verdict in the first line. Locked basis: OpenFOAM v2512 `simpleFoam`, serial, 6,090,240-cell Fine mesh, with **SHA-256 sets of the mesh `boundary`/`points`/`faces`/`owner`/`neighbour` files matching the accepted case exactly** — a machine-checkable proof that the candidate and accepted runs used the same mesh. Force tables are labelled *"reported to diagnose drift, not promoted as coefficients."* |
+| [`run_wo006_true_baseline_openfoam_grid_convergence.py`](https://github.com/Prosper1030/hpa-mdo/blob/research/wo006-openfoam-campaign/scripts/run_wo006_true_baseline_openfoam_grid_convergence.py) · [its test](https://github.com/Prosper1030/hpa-mdo/blob/research/wo006-openfoam-campaign/tests/test_wo006_true_baseline_openfoam_grid_convergence.py) | The ladder as an executable procedure with a regression test, rather than a campaign written up after the fact. |
+| Chordwise `Cp` at three span stations: [root](https://github.com/Prosper1030/hpa-mdo/blob/research/wo006-openfoam-campaign/output/baseline_A_team_release/wo006_su2_baseline_validation/cfd_release_v0_hpa_cp_reasonableness_check/cp_root_eta0p10.png) · [mid](https://github.com/Prosper1030/hpa-mdo/blob/research/wo006-openfoam-campaign/output/baseline_A_team_release/wo006_su2_baseline_validation/cfd_release_v0_hpa_cp_reasonableness_check/cp_mid_eta0p50.png) · [outboard](https://github.com/Prosper1030/hpa-mdo/blob/research/wo006-openfoam-campaign/output/baseline_A_team_release/wo006_su2_baseline_validation/cfd_release_v0_hpa_cp_reasonableness_check/cp_outboard_eta0p80.png) | η = 0.10 / 0.50 / 0.80 pressure distributions — the reasonableness check on the accepted solution. |
+| [`gog_drag_gap_audit/`](https://github.com/Prosper1030/hpa-mdo/blob/research/wo006-openfoam-campaign/output/baseline_A_team_release/wo006_su2_baseline_validation/cfd_release_v0_hpa_solver_campaign_repair/gog_drag_gap_audit) | Six documents reconciling the CFD drag against the older XFOIL/AVL screening build-up, including `induced_drag_consistency_check.md` (not double-counting induced drag) and `turbulence_transition_risk_report.md`. Where the reasoning about *why the two disagree* lives. |
+
+### Why this sequence, and not a headline number
+
+The research-engineering content of this campaign is the sequence, not any single coefficient:
+
+```text
+campaign
+   ↓  numerical / grid verification        Coarse/Medium/Fine, asymptotic band checked
+   ↓  provenance / consistency checks      mesh SHA-256 lock, identical force basis
+   ↓  cross-model reconciliation           CFD vs XFOIL/AVL, induced-drag double-count check
+   ↓  credibility gate                     force-window spans, turbulence-state drift
+   ↓  REJECT PROMOTION when the gate fails no LM/SST result promoted
+```
+
+The last step is the one that matters. Two candidate results showed a *lower* total drag than
+the accepted baseline — an apparent improvement — and were rejected anyway, because the gate
+failed and because decomposing the difference showed cancellation rather than physics.
+
 ## 6. What the numbers currently license
 
 **`CD_total_physical = 0.03326556` is a grid-stable high-drag warning, not the aerodynamic truth

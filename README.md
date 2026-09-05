@@ -20,7 +20,9 @@ which increases deflection and twist, which changes the spanwise load distributi
 both induced drag and the loads the structure has to carry. There is no meaningful sequence in
 which those can be decided independently.
 
-The work in this project is the tooling built to reason about that coupling numerically:
+The aircraft geometry analyzed here — the OpenVSP model, planform, section schedule and
+structural layout — is my own design. The work in this project is the tooling built to reason
+about that design's coupling numerically:
 
 - **one** trusted structural kernel (`hpa-core` — a single kernel, not a library of them) that
   solves a two-spar (dual-beam) wing with lift-wire bracing under a mapped aerodynamic load, and
@@ -226,9 +228,19 @@ of 10.699% / 15.705% in `CD` against a <1% requirement, with turbulent kinetic e
 growing 52–63% over the sampled window. Neither result was promoted. The status is recorded as
 `transition_route_not_established`.
 
-**Consequently, `CD_total_physical = 0.03326556` is treated as a grid-stable high-drag warning,
-not as the aerodynamic truth for this aircraft, and design power has not been revised from it.**
-Establishing a credible low-Reynolds transition prediction is the open verification problem.
+**The transition campaign was not promoted to a design-authoritative result, because the force
+credibility gate was not satisfied.** Consequently `CD_total_physical = 0.03326556` is treated as
+a grid-stable high-drag warning, not as the aerodynamic truth for this aircraft, and design power
+has not been revised from it. Establishing a credible low-Reynolds transition prediction is the
+open verification problem.
+
+The campaign is published so this can be checked, not merely asserted:
+**[`research/wo006-openfoam-campaign`](https://github.com/Prosper1030/hpa-mdo/tree/research/wo006-openfoam-campaign)**
+— 88 research commits, 2026-05-14 → 2026-08-02. Five curated entry points, including the
+grid-independence verdict and the rejected-transition report, are listed in
+[`docs/verification.md`](docs/verification.md#primary-evidence). The sequence that matters —
+verification → provenance → cross-model reconciliation → credibility gate → **reject promotion
+when the gate fails** — is described there too.
 
 ## 7. Representative capabilities
 
@@ -255,7 +267,8 @@ Establishing a credible low-Reynolds transition prediction is the open verificat
 | **hpa-mdo-framework** | This page — project overview and navigation | — | Public |
 | **[hpa-core](https://github.com/Prosper1030/hpa-core)** | **One** kernel — the dual-beam structural FE solve. numpy + scipy only. No config, no file I/O, no aircraft knowledge. 22 files, 4,610 lines. | **Trusted / frozen** | See note below |
 | **[hpa-meshing](https://github.com/Prosper1030/hpa-meshing)** | Geometry normalization → gmsh → SU2, with artifact contracts and convergence gates. | **Experimental research line** | See note below |
-| **hpa-next** | Application and orchestration: config, aircraft model, material DB, load mapping, OpenMDAO stack, mission analysis, and the WO-006 OpenFOAM campaign. | **Active development** | **Private** while the post-split development line stabilizes. Its architectural role is described here rather than omitted. |
+| **[WO-006 OpenFOAM campaign](https://github.com/Prosper1030/hpa-mdo/tree/research/wo006-openfoam-campaign)** | The full-wing RANS verification study: grid-convergence ladder, provenance gates, and the transition campaign that failed its credibility gate and was not promoted. Published as a branch of the legacy repository. | **Complete study, negative result** | Public branch — the strongest verification evidence in the project |
+| **hpa-next** | Application and orchestration: config, aircraft model, material DB, load mapping, OpenMDAO stack, mission analysis. Also where the WO-006 campaign's code lives. | **Active development** | **Private** while the post-split development line stabilizes. Its architectural role is described here rather than omitted. |
 | **[hpa-mdo](https://github.com/Prosper1030/hpa-mdo)** | The original monolith. 1,318 commits. Preserved as development history; also still the shared git object store. | **Legacy** | Public — history, not a starting point |
 | **[HPA-Fairing-Optimization-Project](https://github.com/Prosper1030/HPA-Fairing-Optimization-Project)** | Undergraduate thesis work: fairing shape optimization. | Complete | Public |
 | **[birdman_project](https://github.com/Prosper1030/birdman_project)** | DSM/WBS dependency analysis and interactive editor. Where the project started. | Stable | Public |
@@ -296,7 +309,13 @@ from a clean checkout.
 
 Developed by **Y. A. Lin (林禹安)**, B.S. Aeronautics and Astronautics, National Cheng Kung
 University — founder and chief engineer of the NCKU human-powered aircraft team, formerly
-aerodynamics lead.
+aerodynamics lead and competition liaison.
+
+**I designed and parameterized the aircraft geometry** that this workflow analyzes — the
+OpenVSP model, the planform and section schedule, and the structural layout — **and developed
+the computational analysis and design tooling described here.** Building and flying a
+human-powered aircraft is a team undertaking, and the manufacturing, assembly, flight-test and
+operations work belongs to the team, not to this repository.
 
 Undergraduate thesis: *Analysis of Fairing Shapes for a Human-Powered Aircraft*.
 

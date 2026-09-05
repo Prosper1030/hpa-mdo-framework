@@ -7,7 +7,7 @@ Seven repositories. Which one to open depends on what you want to see.
 | What the project is | this repository (you are here) |
 | Numerical method quality, tests, a small readable codebase | [`hpa-core`](https://github.com/Prosper1030/hpa-core) |
 | Meshing/CFD infrastructure research, including what failed and why it paused | [`hpa-meshing`](https://github.com/Prosper1030/hpa-meshing) |
-| The RANS grid-convergence study and the rejected transition campaign | [`verification.md`](verification.md) §4–6 *(code is in the private `hpa-next`)* |
+| The RANS grid-convergence study and the rejected transition campaign | [`research/wo006-openfoam-campaign`](https://github.com/Prosper1030/hpa-mdo/tree/research/wo006-openfoam-campaign) — curated entry points in [`verification.md`](verification.md#primary-evidence) |
 | Undergraduate research: shape optimization end to end | [`HPA-Fairing-Optimization-Project`](https://github.com/Prosper1030/HPA-Fairing-Optimization-Project) |
 | Where the project started: systems decomposition | [`birdman_project`](https://github.com/Prosper1030/birdman_project) |
 | The full development record | [`hpa-mdo`](https://github.com/Prosper1030/hpa-mdo) |
@@ -52,6 +52,22 @@ problem; the mesh-native branch was frozen and written up rather than continued 
 error. See [`verification.md`](verification.md) §7.
 
 The failed and blocked work is kept, and it is not the first thing on the page.
+
+## `research/wo006-openfoam-campaign` — the RANS verification study *(branch of `hpa-mdo`)*
+
+**Maturity: a completed study with a negative result.** 88 commits, 2026-05-14 → 2026-08-02,
+plus one commit removing third-party documents from the branch tip.
+
+The full-wing OpenFOAM campaign: Coarse/Medium/Fine grid-convergence ladder on a locked
+numerical setup, mesh-identity provenance locks, cross-model reconciliation against the older
+XFOIL/AVL screening build-up, and a transition-model campaign that **failed its force
+credibility gate and was not promoted to a design-authoritative result.**
+
+Published as a branch rather than merged to `main`: it is evidence to be cited, not the
+repository's front door. The code lives in the private `hpa-next`; this branch is the record of
+the study and its artifacts. Five curated entry points are listed in
+[`verification.md`](verification.md#primary-evidence) — start there rather than browsing 988
+output files.
 
 ## `hpa-next` — application and orchestration *(private)*
 
