@@ -6,7 +6,7 @@ Seven repositories. Which one to open depends on what you want to see.
 |---|---|
 | What the project is | this repository (you are here) |
 | Numerical method quality, tests, a small readable codebase | [`hpa-core`](https://github.com/Prosper1030/hpa-core) |
-| Meshing/CFD infrastructure research, including what failed and why it paused | [`hpa-meshing`](https://github.com/Prosper1030/hpa-meshing) |
+| Meshing/CFD infrastructure research, including what failed and why it paused | `hpa-meshing` — *publication pending* |
 | The RANS grid-convergence study and the rejected transition campaign | [`research/wo006-openfoam-campaign`](https://github.com/Prosper1030/hpa-mdo/tree/research/wo006-openfoam-campaign) — curated entry points in [`verification.md`](verification.md#primary-evidence) |
 | Undergraduate research: shape optimization end to end | [`HPA-Fairing-Optimization-Project`](https://github.com/Prosper1030/HPA-Fairing-Optimization-Project) |
 | Where the project started: systems decomposition | [`birdman_project`](https://github.com/Prosper1030/birdman_project) |
@@ -33,7 +33,8 @@ property that makes it worth trusting; expanding it would cost exactly that.
 
 ## `hpa-meshing` — meshing/CFD productization line (paused)
 
-**Maturity: paused experimental.** Produces evidence, not authority.
+**Maturity: paused experimental. Publication pending — a cleaned public release is being
+prepared separately, so there is no link here yet.** Produces evidence, not authority.
 
 **This is not where the WO-006 OpenFOAM verification campaign lives.** That work — the
 Coarse/Medium/Fine grid-convergence ladder and the rejected transition study in
